@@ -58,8 +58,6 @@ class UserManager extends BaseManager
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
-            'permissions' => 'array',
-            'groups' => 'array',
         ]);
 
         if($validate->fails()) return new Result(false,$validate->errors()->first(),[],400);
@@ -68,15 +66,6 @@ class UserManager extends BaseManager
         $user = $this->userRepository->create($request->all());
 
         if(!$user) return new Result(false,"Failed create user account.",[],400);
-
-        // attach to group
-        if($groups = $request->get('groups',[]))
-        {
-            foreach ($groups as $groupId => $shouldAttach)
-            {
-                if($shouldAttach) $user->groups()->attach($groupId);
-            }
-        }
 
         return new Result(true,"User account created.",$user,201);
     }
@@ -108,13 +97,11 @@ class UserManager extends BaseManager
      * @since  v1.0
      * @author darryldecode <darrylfernandez.com>
      */
-    public function update(Request $request, $id)
+    public function updateUser(Request $request, $id)
     {
         $validate = validator($request->all(),[
             'name' => 'required',
-            'email' => 'required|email',
-            'permissions' => 'array',
-            'groups' => 'array',
+            'email' => 'email|unique:users,email',
         ]);
 
         if($validate->fails()) return new Result(false,$validate->errors()->first(),[],400);
@@ -129,22 +116,6 @@ class UserManager extends BaseManager
 
         if(!$updated) return new Result(false,"Failed to update user.",[],400);
 
-        // re-sync groups
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
-
-        $groupIds = [];
-
-        if($groups = $request->get('groups',[]))
-        {
-            foreach ($groups as $groupId => $shouldAttach)
-            {
-                if($shouldAttach) $groupIds[] = $groupId;
-            }
-        }
-
-        $user->groups()->sync($groupIds);
-
         return new Result(true,"User successfully updated.",[],200);
     }
 
@@ -154,7 +125,7 @@ class UserManager extends BaseManager
      * @param  int  $id
      * @return \App\Components\Core\Result
      */
-    public function destroy($id)
+    public function deleteUser($id)
     {
         // do not delete self
         if($id == auth()->user()->id) return new Result(false,"Forbidden action.",[],401);

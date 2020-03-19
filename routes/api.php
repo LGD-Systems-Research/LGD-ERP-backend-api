@@ -15,6 +15,17 @@ use Illuminate\Http\Request;
 
 Route::post('/auth', "Api\AuthController@authenticate");
 
-Route::middleware(['auth:airlock'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:airlock'])->namespace('Api')->group(function()
+{
+    Route::get('/users',"UserController@index");
+    Route::post('/users',"UserController@store");
+    Route::put('/users/{id}',"UserController@update");
+    Route::get('/users/{id}',"UserController@show");
+    Route::delete('/users/{id}',"UserController@delete");
+
+    Route::get('/permissions',"PermissionController@index");
+    Route::post('/permissions',"PermissionController@store");
+    Route::put('/permissions/{id}',"PermissionController@update");
+    Route::get('/permissions/{id}',"PermissionController@show");
+    Route::delete('/permissions/{id}',"PermissionController@delete");
 });

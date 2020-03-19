@@ -30,6 +30,16 @@ abstract class BaseRepository
     }
 
     /**
+     * @return $this|\Illuminate\Database\Eloquent\Model|mixed
+     * @since  v1.0
+     * @author darryldecode <darrylfernandez.com>
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * @param array $params
      * @param array $with
      * @param callable|null $callable

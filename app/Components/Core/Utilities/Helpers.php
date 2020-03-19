@@ -266,4 +266,27 @@ class Helpers
         fclose($fp);
         return true;
     }
+
+    /**
+     * @param string $data
+     *
+     * @param bool $castToBoolean
+     *
+     * @return array
+     * @author darryldecode <darrylfernandez.com>
+     * @since  v1.0
+     */
+    public static function dismantleToAssociativeArray(string $data, bool $castToBoolean = false) : array
+    {
+        $newArr = [];
+        $lines = explode("|",$data);
+
+        foreach($lines as $line)
+        {
+            $e = explode(":",$line);
+            $newArr[$e[0]] = $castToBoolean ? boolval($e[1]) : $e[1];
+        }
+
+        return $newArr;
+    }
 }

@@ -22,7 +22,7 @@ Auth::routes();
 // for demo purpose to prevent viewers to modify data on a live demo site
 
 // admin
-Route::prefix('admin')->namespace('Admin')->middleware(['auth','demo'])->group(function()
+Route::prefix('admin')->namespace('Admin')->middleware(['auth'])->group(function()
 {
     // single page
     Route::get('/', 'SinglePageController@displaySPA')->name('admin.spa');

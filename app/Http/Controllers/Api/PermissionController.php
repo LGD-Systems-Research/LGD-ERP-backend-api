@@ -4,39 +4,40 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Components\User\UserManager;
+use App\Components\User\Models\Permission;
+use App\Components\User\PermissionManager;
 use Illuminate\Http\Request;
 
-class UserController extends ApiController
+class PermissionController extends ApiController
 {
     /**
-     * @var \App\Components\User\UserManager
+     * @var \App\Components\User\PermissionManager
      */
-    private $userManager;
+    private $permissionManager;
 
     /**
-     * UserController constructor.
+     * PermissionController constructor.
      *
-     * @param \App\Components\User\UserManager $userManager
+     * @param \App\Components\User\PermissionManager $permissionManager
      *
      * @since  v1.0
      * @author darryldecode <darrylfernandez.com>
      */
-    public function __construct(UserManager $userManager)
+    public function __construct(PermissionManager $permissionManager)
     {
-        $this->userManager = $userManager;
+        $this->permissionManager = $permissionManager;
     }
 
     /**
+     * Display a listing of the resource.
+     *
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
-     * @author darryldecode <darrylfernandez.com>
-     * @since  v1.0
      */
     public function index(Request $request)
     {
-        $result = $this->userManager->listUsers($request);
+        $result = $this->permissionManager->index($request);
 
         return $this->sendResponse(
             $result->getData(),
@@ -46,15 +47,14 @@ class UserController extends ApiController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * Store a newly created resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     * @author darryldecode <darrylfernandez.com>
-     * @since  v1.0
      */
     public function store(Request $request)
     {
-        $result = $this->userManager->createUser($request);
+        $result = $this->permissionManager->createPermission($request);
 
         return $this->sendResponse(
             $result->getData(),
@@ -64,34 +64,14 @@ class UserController extends ApiController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param $id
+     * Display the specified resource.
      *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
-     * @since  v1.0
-     * @author darryldecode <darrylfernandez.com>
-     */
-    public function update(Request $request, $id)
-    {
-        $result = $this->userManager->updateUser($request, $id);
-
-        return $this->sendResponse(
-            $result->getData(),
-            $result->getMessage(),
-            $result->getStatusCode()
-        );
-    }
-
-    /**
-     * @param $id
-     *
-     * @return \Illuminate\Http\Response
-     * @author darryldecode <darrylfernandez.com>
-     * @since  v1.0
      */
     public function show($id)
     {
-        $result = $this->userManager->showById($id);
+        $result = $this->permissionManager->show($id);
 
         return $this->sendResponse(
             $result->getData(),
@@ -101,15 +81,32 @@ class UserController extends ApiController
     }
 
     /**
-     * @param $id
+     * Update the specified resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
-     * @author darryldecode <darrylfernandez.com>
-     * @since  v1.0
+     */
+    public function update(Request $request, $id)
+    {
+        $result = $this->permissionManager->update($request, $id);
+
+        return $this->sendResponse(
+            $result->getData(),
+            $result->getMessage(),
+            $result->getStatusCode()
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function delete($id)
     {
-        $result = $this->userManager->deleteUser($id);
+        $result = $this->permissionManager->deletePermission($id);
 
         return $this->sendResponse(
             $result->getData(),

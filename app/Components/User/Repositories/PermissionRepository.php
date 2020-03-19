@@ -21,6 +21,20 @@ class PermissionRepository extends BaseRepository
     }
 
     /**
+     * @param string $key
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     * @author darryldecode <darrylfernandez.com>
+     * @since  v1.0
+     */
+    public function getByKey(string $key)
+    {
+        $query = $this->getModel()->newQuery();
+
+        return $query->where('key',$key)->first();
+    }
+
+    /**
      * index items
      *
      * @param array $params
