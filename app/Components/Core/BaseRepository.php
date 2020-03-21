@@ -76,7 +76,7 @@ abstract class BaseRepository
     /**
      * @param int $id
      * @param array $attributes
-     * @return bool
+     * @return bool|Model
      */
     public function update(int $id, array $attributes)
     {
@@ -84,7 +84,9 @@ abstract class BaseRepository
 
         if(!$model) return false;
 
-        return $model->update($attributes);
+        if(!$model->update($attributes)) return false;
+
+        return $model;
     }
 
     /**

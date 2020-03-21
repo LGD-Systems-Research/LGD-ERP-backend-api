@@ -28,4 +28,12 @@ Route::middleware(['auth:airlock'])->namespace('Api')->group(function()
     Route::put('/permissions/{id}',"PermissionController@update");
     Route::get('/permissions/{id}',"PermissionController@show");
     Route::delete('/permissions/{id}',"PermissionController@delete");
+
+    Route::get('/groups',"GroupController@index");
+    Route::post('/groups',"GroupController@store");
+    Route::put('/groups/{id}',"GroupController@update");
+    Route::get('/groups/{id}',"GroupController@show");
+    Route::delete('/groups/{id}',"GroupController@delete");
+
+    Route::get('/activities',"ActivityController@index");
 });
